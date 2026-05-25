@@ -1,0 +1,34 @@
+<header class="page-header">
+    <div class="header-strip">
+        <span class="strip-icon">🧪</span>
+        <span>Ambiente de testes</span>
+    </div>
+
+    <div class="header-main">
+        <div class="brand-left">
+            <img src="{{ url_for('static', filename='logo_secretaria.png') }}" alt="Secretaria de Educação de Sumaré" class="logo header-logo" />
+            <div class="brand-copy">
+                <span class="header-context">Núcleo de Inclusão</span>
+                <h1>Sistema de Triagem e Acompanhamento Inclusivo</h1>
+            </div>
+        </div>
+        
+        <!-- Painel do Usuário -->
+        <div class="user-panel">
+            <div class="user-info">
+                <span class="user-icon">👤</span>
+                <span class="user-name">{{ session.get('usuario', 'Usuário') }}</span>
+            </div>
+            <a href="{{ url_for('logout') }}" class="logout-button" title="Sair do sistema">
+                Sair
+            </a>
+        </div>
+    </div>
+
+    <nav class="main-nav">
+        <a href="{{ url_for('index') }}" class="nav-link {% if request.path == url_for('index') %}active{% endif %}">Início</a>
+        <a href="{{ url_for('novo_cadastro') }}" class="nav-link {% if request.path == url_for('novo_cadastro') %}active{% endif %}">Novo Cadastro</a>
+        <a href="{{ url_for('alunos') }}" class="nav-link {% if request.path == url_for('alunos') %}active{% endif %}">Alunos</a>
+        <a href="{{ url_for('relatorios') }}" class="nav-link {% if request.path == url_for('relatorios') %}active{% endif %}">Relatórios</a>
+    </nav>
+</header>

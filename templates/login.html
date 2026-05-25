@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Login - Sistema de Triagem e Acompanhamento Inclusivo</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}" />
+</head>
+<body class="login-body">
+    <div class="login-container">
+        <div class="login-card">
+            <!-- Logo da Secretaria -->
+            <div class="login-logo">
+                <img src="{{ url_for('static', filename='logo_secretaria.png') }}" alt="Secretaria de Educação de Sumaré" class="logo" />
+            </div>
+
+            <!-- Título e Contexto -->
+            <div class="login-header">
+                <h1>Sistema de Triagem e Acompanhamento Inclusivo</h1>
+                <p class="login-subtitle">Núcleo de Inclusão — Secretaria Municipal de Educação de Sumaré</p>
+            </div>
+
+            <!-- Formulário de Login -->
+            <form class="login-form" method="post">
+                <!-- Campo de Usuário -->
+                <div class="form-group">
+                    <label for="usuario" class="form-label">
+                        <span class="form-icon">👤</span>
+                        Usuário
+                    </label>
+                    <input 
+                        type="text" 
+                        id="usuario" 
+                        name="usuario" 
+                        class="form-input" 
+                        placeholder="Digite seu usuário"
+                        required
+                        autofocus
+                    />
+                </div>
+
+                <!-- Campo de Senha -->
+                <div class="form-group">
+                    <label for="senha" class="form-label">
+                        <span class="form-icon">🔒</span>
+                        Senha
+                    </label>
+                    <div class="password-wrapper">
+                        <input 
+                            type="password" 
+                            id="senha" 
+                            name="senha" 
+                            class="form-input" 
+                            placeholder="Digite sua senha"
+                            required
+                        />
+                        <button 
+                            type="button" 
+                            class="password-toggle" 
+                            onclick="togglePasswordVisibility()"
+                            title="Mostrar/Ocultar senha"
+                        >
+                            👁️
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Mensagem de Erro -->
+                {% if erro %}
+                    <div class="error-message">
+                        <span class="error-icon">⚠️</span>
+                        <span>{{ erro }}</span>
+                    </div>
+                {% endif %}
+
+                <!-- Botão de Entrar -->
+                <button type="submit" class="login-button">
+                    Entrar no Sistema
+                </button>
+            </form>
+
+            <!-- Informações Adicionais -->
+            <div class="login-footer">
+                <p class="footer-text">
+                    Sistema institucional seguro
+                </p>
+                <p class="footer-disclaimer">
+                    Protótipo desenvolvido por Prof. Rodrigo Dias
+                </p>
+            </div>
+        </div>
+
+        <!-- Background decorativo -->
+        <div class="login-background">
+            <div class="shape shape-1"></div>
+            <div class="shape shape-2"></div>
+            <div class="shape shape-3"></div>
+        </div>
+    </div>
+
+    <!-- Script para alternar visibilidade da senha -->
+    <script>
+        function togglePasswordVisibility() {
+            const senhaInput = document.getElementById('senha');
+            const toggleButton = document.querySelector('.password-toggle');
+            
+            if (senhaInput.type === 'password') {
+                senhaInput.type = 'text';
+                toggleButton.textContent = '🙈';
+            } else {
+                senhaInput.type = 'password';
+                toggleButton.textContent = '👁️';
+            }
+        }
+
+        // Animação ao carregar
+        window.addEventListener('load', function() {
+            document.querySelector('.login-card').classList.add('loaded');
+        });
+
+        // Entrar com Enter
+        document.querySelector('.login-form').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter' && e.target.id === 'senha') {
+                this.submit();
+            }
+        });
+    </script>
+</body>
+</html>

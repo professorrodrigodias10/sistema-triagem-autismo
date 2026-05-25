@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>{{ titulo }}</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}" />
+</head>
+<body>
+    {% include 'header.html' %}
+
+    <main class="container">
+        <section class="form-card">
+            <div class="form-header">
+                <div>
+                    <span class="eyebrow">Cadastro escolar</span>
+                    <h2>{{ titulo }}</h2>
+                    <p class="section-note">Registre dados de alunos e observações escolares com um fluxo rápido e organizado.</p>
+                </div>
+                <a class="button secondary" href="{{ url_for('index') }}">Voltar ao início</a>
+            </div>
+
+            <p class="warning">{{ aviso }}</p>
+            <form method="post">
+                <fieldset>
+                    <legend>Cadastro da escola</legend>
+                    <label for="escola_nome">Nome da escola</label>
+                    <select id="escola_nome" name="escola_nome" class="school-select" required>
+                        <option value="" disabled {% if not aluno.get('escola_nome') %}selected{% endif %}>Selecione uma escola municipal</option>
+                        <optgroup label="Escolas Municipais">
+                            {% for escola in escolas_municipais %}
+                                <option value="{{ escola }}" {% if aluno.get('escola_nome') == escola %}selected{% endif %}>{{ escola }}</option>
+                            {% endfor %}
+                        </optgroup>
+                    </select>
+
+                    <label for="unidade_regiao">Região da escola</label>
+                    <select id="unidade_regiao" name="unidade_regiao" class="school-select">
+                        <option value="" disabled {% if not aluno.get('unidade_regiao') %}selected{% endif %}>Selecione ou ajuste a região</option>
+                        {% for regiao in regioes %}
+                            <option value="{{ regiao }}" {% if aluno.get('unidade_regiao') == regiao %}selected{% endif %}>{{ regiao }}</option>
+                        {% endfor %}
+                    </select>
+                    <p class="field-note">Região sugerida automaticamente com base na escola. Conferir e ajustar se necessário.</p>
+
+                    <label for="responsavel_preenc">Nome do responsável pelo preenchimento</label>
+                    <input id="responsavel_preenc" type="text" name="responsavel_preenc" value="{{ aluno.get('responsavel_preenc', '') }}" />
+
+                    <label for="cargo_funcao">Cargo/função</label>
+                    <input id="cargo_funcao" type="text" name="cargo_funcao" value="{{ aluno.get('cargo_funcao', '') }}" />
+
+                    <label for="telefone_email">Telefone/e-mail institucional</label>
+                    <input id="telefone_email" type="text" name="telefone_email" value="{{ aluno.get('telefone_email', '') }}" />
+                </fieldset>
+
+                <fieldset>
+                    <legend>Dados do aluno</legend>
+                    <label for="aluno_nome">Nome completo</label>
+                    <input id="aluno_nome" type="text" name="aluno_nome" value="{{ aluno.get('aluno_nome', '') }}" required />
+
+                    <label for="data_nascimento">Data de nascimento</label>
+                    <input id="data_nascimento" type="date" name="data_nascimento" value="{{ aluno.get('data_nascimento', '') }}" />
+
+                    <label for="idade">Idade</label>
+                    <input id="idade" type="text" name="idade" value="{{ aluno.get('idade', '') }}" />
+
+                    <label for="ano_serie">Ano/série</label>
+                    <input id="ano_serie" type="text" name="ano_serie" value="{{ aluno.get('ano_serie', '') }}" />
+
+                    <label for="turma">Turma</label>
+                    <input id="turma" type="text" name="turma" value="{{ aluno.get('turma', '') }}" />
+
+                    <label for="turno">Turno</label>
+                    <input id="turno" type="text" name="turno" value="{{ aluno.get('turno', '') }}" />
+
+                    <label for="responsavel_familiar">Nome do responsável familiar</label>
+                    <input id="responsavel_familiar" type="text" name="responsavel_familiar" value="{{ aluno.get('responsavel_familiar', '') }}" />
+
+                    <label for="telefone_responsavel">Telefone do responsável</label>
+                    <input id="telefone_responsavel" type="text" name="telefone_responsavel" value="{{ aluno.get('telefone_responsavel', '') }}" />
+
+                    <label for="laudo">O aluno já possui laudo?</label>
+                    <select id="laudo" name="laudo">
+                        {% for opcao in ['Sim', 'Não', 'Em avaliação'] %}
+                            <option value="{{ opcao }}" {% if aluno.get('laudo') == opcao %}selected{% endif %}>{{ opcao }}</option>
+                        {% endfor %}
+                    </select>
+
+                    <label for="aee">Já recebe AEE?</label>
+                    <select id="aee" name="aee">
+                        {% for opcao in ['Sim', 'Não'] %}
+                            <option value="{{ opcao }}" {% if aluno.get('aee') == opcao %}selected{% endif %}>{{ opcao }}</option>
+                        {% endfor %}
+                    </select>
+
+                    <label for="acompanhamento_externo">Possui acompanhamento externo?</label>
+                    <select id="acompanhamento_externo" name="acompanhamento_externo">
+                        {% for opcao in ['Sim', 'Não', 'Não informado'] %}
+                            <option value="{{ opcao }}" {% if aluno.get('acompanhamento_externo') == opcao %}selected{% endif %}>{{ opcao }}</option>
+                        {% endfor %}
+                    </select>
+                </fieldset>
+
+                <fieldset>
+                    <legend>Questionário de observação escolar</legend>
+                    {% for campo, pergunta in observacoes %}
+                        <label for="{{ campo }}">{{ pergunta }}</label>
+                        <select id="{{ campo }}" name="{{ campo }}">
+                            {% for opcao in opcoes %}
+                                <option value="{{ opcao }}" {% if aluno.get(campo) == opcao %}selected{% endif %}>{{ opcao }}</option>
+                            {% endfor %}
+                        </select>
+                    {% endfor %}
+                </fieldset>
+
+                <div class="actions-row">
+                    <button class="button primary" type="submit">Salvar cadastro</button>
+                    <a class="button secondary" href="{{ url_for('index') }}">Voltar</a>
+                </div>
+            </form>
+        </section>
+    </main>
+
+    {% include 'footer.html' %}
+</body>
+</html>

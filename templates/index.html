@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Sistema de Triagem e Acompanhamento Inclusivo</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}" />
+</head>
+<body>
+    {% include 'header.html' %}
+
+    <main class="container">
+        <section class="hero-section">
+            <div class="hero-left">
+                <span class="eyebrow">Portal institucional</span>
+                <h2>Gestão de triagem e observações escolares do Núcleo de Inclusão</h2>
+                <p class="hero-description">Ferramenta de apoio da Secretaria Municipal de Educação de Sumaré para coletar, organizar e analisar registros de observações escolares em um ambiente institucional confiável.</p>
+
+                <div class="hero-actions">
+                    <a class="button primary" href="{{ url_for('novo_cadastro') }}">➕ Novo cadastro</a>
+                    <a class="button secondary" href="{{ url_for('alunos') }}">👥 Alunos</a>
+                </div>
+            </div>
+
+            <div class="hero-right">
+                <div class="indicator-card">
+                    <div class="indicator-icon">👩‍🎓</div>
+                    <div>
+                        <span class="indicator-label">Alunos cadastrados</span>
+                        <strong>{{ total_alunos | default(0) }}</strong>
+                    </div>
+                </div>
+                <div class="indicator-card">
+                    <div class="indicator-icon">🏫</div>
+                    <div>
+                        <span class="indicator-label">Escolas participantes</span>
+                        <strong>{{ total_escolas | default(0) }}</strong>
+                    </div>
+                </div>
+                <div class="indicator-card">
+                    <div class="indicator-icon">⚠️</div>
+                    <div>
+                        <span class="indicator-label">Casos em atenção</span>
+                        <strong>{{ casos_atencao | default(0) }}</strong>
+                    </div>
+                </div>
+                <div class="indicator-card">
+                    <div class="indicator-icon">🕒</div>
+                    <div>
+                        <span class="indicator-label">Registros recentes</span>
+                        <strong>{{ registros_recentes | default(0) }}</strong>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="summary-section" id="relatorios">
+            <div class="summary-card">
+                <div>
+                    <h3>Relatórios e acompanhamento</h3>
+                    <p>Consulte dados atualizados e extraia relatórios para apoiar o trabalho da equipe técnica e a rede escolar.</p>
+                </div>
+                <a class="button primary" href="{{ url_for('relatorios') }}">Ver relatórios</a>
+            </div>
+        </section>
+    </main>
+
+    {% include 'footer.html' %}
+
+    {% if scroll_to %}
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            var target = document.getElementById('{{ scroll_to }}');
+            if (target) {
+                target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            }
+        });
+    </script>
+    {% endif %}
+</body>
+</html>

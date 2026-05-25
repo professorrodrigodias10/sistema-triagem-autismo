@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Alunos</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}" />
+</head>
+<body>
+    {% include 'header.html' %}
+
+    <main class="container">
+        <section class="list-card">
+            <div class="list-header">
+                <div>
+                    <span class="eyebrow">Gerenciamento de alunos</span>
+                    <h2>Alunos cadastrados</h2>
+                    <p class="section-note">Busque, filtre e gerencie cadastros com facilidade. Localize estudantes por nome, escola ou turma.</p>
+                    <p class="warning">{{ aviso }}</p>
+                </div>
+                <div class="list-actions">
+                    <a class="button secondary" href="{{ url_for('index') }}">Voltar</a>
+                </div>
+            </div>
+
+            <form class="search-form" method="get" action="{{ url_for('alunos') }}">
+                <input 
+                    type="text" 
+                    name="q" 
+                    placeholder="Buscar por aluno, escola ou turma..." 
+                    value="{{ termo or '' }}"
+                    class="search-input"
+                />
+                <button class="button primary" type="submit">Buscar</button>
+                {% if termo %}
+                    <a href="{{ url_for('alunos') }}" class="button secondary">Limpar</a>
+                {% endif %}
+            </form>
+
+            <p class="list-message">{{ mensagem }}</p>
+
+            {% if cadastros %}
+                <div class="table-scroll">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Aluno</th>
+                                <th>Escola</th>
+                                <th>Região</th>
+                                <th>Turma</th>
+                                <th>Ações</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for aluno in cadastros %}
+                                <tr>
+                                    <td>{{ aluno['aluno_nome'] }}</td>
+                                    <td>{{ aluno['escola_nome'] }}</td>
+                                    <td>{{ aluno['unidade_regiao'] or '-' }}</td>
+                                    <td>{{ aluno['turma'] or '-' }}</td>
+                                    <td class="actions-cell">
+                                        <a class="button small" href="{{ url_for('detalhes', aluno_id=aluno['id']) }}">Ver</a>
+                                        <a class="button small" href="{{ url_for('editar', aluno_id=aluno['id']) }}">Editar</a>
+                                        <form method="post" action="{{ url_for('excluir', aluno_id=aluno['id']) }}" onsubmit="return confirm('Deseja realmente excluir este cadastro?');">
+                                            <button class="button small danger" type="submit">Excluir</button>
+                                        </form>
+                                    </td>
+                                </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            {% else %}
+                <div class="empty-state">
+                    <p>{% if termo %}Nenhum cadastro encontrado para "{{ termo }}".{% else %}Nenhum cadastro encontrado.{% endif %}</p>
+                </div>
+            {% endif %}
+        </section>
+    </main>
+
+    {% include 'footer.html' %}
+</body>
+</html>

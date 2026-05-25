@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Detalhes do Cadastro</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}" />
+</head>
+<body>
+    {% include 'header.html' %}
+
+    <main class="container">
+        <section class="detail-card">
+            <div class="header-row">
+                <div>
+                    <span class="eyebrow">Detalhes do aluno</span>
+                    <h2>Visualização do cadastro</h2>
+                    <p class="section-note">Revise as informações cadastradas, os parâmetros de triagem e a história educacional do aluno em um só lugar.</p>
+                    <p class="warning">{{ aviso }}</p>
+                </div>
+                <a class="button secondary" href="{{ url_for('alunos') }}">Voltar à lista</a>
+            </div>
+
+            <div class="info-grid">
+                <div>
+                    <h2>Dados da escola</h2>
+                    <p><strong>Escola:</strong> {{ aluno['escola_nome'] }}</p>
+                    <p><strong>Região da escola:</strong> {{ aluno['unidade_regiao'] }}</p>
+                    <p><strong>Responsável pelo preenchimento:</strong> {{ aluno['responsavel_preenc'] }}</p>
+                    <p><strong>Cargo/função:</strong> {{ aluno['cargo_funcao'] }}</p>
+                    <p><strong>Telefone/e-mail institucional:</strong> {{ aluno['telefone_email'] }}</p>
+                </div>
+                <div>
+                    <h2>Dados do aluno</h2>
+                    <p><strong>Nome:</strong> {{ aluno['aluno_nome'] }}</p>
+                    <p><strong>Data de nascimento:</strong> {{ aluno['data_nascimento'] }}</p>
+                    <p><strong>Idade:</strong> {{ aluno['idade'] }}</p>
+                    <p><strong>Ano/série:</strong> {{ aluno['ano_serie'] }}</p>
+                    <p><strong>Turma:</strong> {{ aluno['turma'] }}</p>
+                    <p><strong>Turno:</strong> {{ aluno['turno'] }}</p>
+                    <p><strong>Responsável familiar:</strong> {{ aluno['responsavel_familiar'] }}</p>
+                    <p><strong>Telefone do responsável:</strong> {{ aluno['telefone_responsavel'] }}</p>
+                    <p><strong>Data do cadastro:</strong> {{ aluno.get('data_cadastro', '-') }}</p>
+                    <p><strong>Status do caso:</strong> {{ aluno.get('status_caso', '-') }}</p>
+                    <p><strong>Nível de atenção:</strong> {{ aluno.get('nivel_atencao', '-') }}</p>
+                    <p><strong>Sinais observados:</strong> {{ aluno.get('sinais_observados', '-') }}</p>
+                    <p><strong>Observações pedagógicas:</strong> {{ aluno.get('observacoes_pedagogicas', '-') }}</p>
+                    <p><strong>Possui laudo:</strong> {{ aluno['laudo'] }}</p>
+                    <p><strong>Recebe AEE:</strong> {{ aluno['aee'] }}</p>
+                    <p><strong>Acompanhamento externo:</strong> {{ aluno['acompanhamento_externo'] }}</p>
+                </div>
+            </div>
+
+            <section class="observation-report">
+                <h2>Observações escolares</h2>
+                <div class="observations-grid">
+                    {% for campo, pergunta in observacoes %}
+                        <div class="observacao-item">
+                            <strong>{{ pergunta }}</strong>
+                            <p>{{ aluno[campo] }}</p>
+                        </div>
+                    {% endfor %}
+                </div>
+            </section>
+
+            <section class="result-card">
+                <h2>Resultado da triagem</h2>
+                <p><strong>Pontuação total:</strong> {{ pontuacao }}</p>
+                <p><strong>Classificação:</strong> {{ classificacao }}</p>
+                <p class="warning">{{ aviso }}</p>
+            </section>
+
+            <div class="actions-row">
+                <a class="button primary" href="{{ url_for('editar', aluno_id=aluno['id']) }}">Editar cadastro</a>
+                <a class="button secondary" href="javascript:window.print()">Imprimir relatório</a>
+            </div>
+        </section>
+    </main>
+
+    {% include 'footer.html' %}
+</body>
+</html>

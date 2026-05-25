@@ -1,0 +1,276 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Relatório Geral de Triagem e Acompanhamento Inclusivo</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}" />
+</head>
+<body>
+    {% include 'header.html' %}
+
+    <main class="container">
+        <section class="report-header report-card">
+            <div class="report-header-top">
+                <div>
+                    <img src="{{ url_for('static', filename='logo_secretaria.png') }}" alt="Secretaria de Educação de Sumaré" class="report-logo" />
+                    <div class="report-headline">
+                        <span class="eyebrow">Relatório institucional</span>
+                        <h2>Relatório Geral de Triagem e Acompanhamento Inclusivo</h2>
+                        <p class="subtitle">Núcleo de Inclusão — Secretaria Municipal de Educação de Sumaré</p>
+                    </div>
+                </div>
+                <div class="report-meta">
+                    <p><strong>Data de geração:</strong> {{ data_geracao }}</p>
+                    <p class="report-badge">Dados fictícios para demonstração institucional</p>
+                </div>
+            </div>
+
+            <div class="report-actions">
+                <a class="button secondary" href="{{ url_for('relatorios') }}">Gerar relatório</a>
+                <button class="button primary" onclick="window.print()">Imprimir relatório</button>
+                <a class="button secondary" href="{{ url_for('index') }}">Voltar</a>
+            </div>
+        </section>
+
+        <section class="dashboard-grid report-summary">
+            <div class="stat-card report-stat-card">
+                <h3>Alunos cadastrados</h3>
+                <p class="stat-value">{{ total_alunos }}</p>
+                <p class="stat-text">Total geral de alunos registrados no sistema.</p>
+            </div>
+            <div class="stat-card report-stat-card">
+                <h3>Escolas participantes</h3>
+                <p class="stat-value">{{ total_escolas }}</p>
+                <p class="stat-text">Número de escolas municipais representadas.</p>
+            </div>
+            <div class="stat-card report-stat-card">
+                <h3>Casos em atenção</h3>
+                <p class="stat-value">{{ casos_atencao }}</p>
+                <p class="stat-text">Alunos com status de atenção ou acompanhamento.</p>
+            </div>
+            <div class="stat-card report-stat-card">
+                <h3>Registros recentes</h3>
+                <p class="stat-value">{{ registros_recentes }}</p>
+                <p class="stat-text">Cadastros realizados nos últimos 7 dias.</p>
+            </div>
+        </section>
+
+        <section class="report-card chart-section">
+            <div class="section-card-content">
+                <div>
+                    <h3>Visão gráfica de distribuição</h3>
+                    <p class="subtitle">Indicadores visuais para leitura rápida do relatório.</p>
+                </div>
+            </div>
+            <div class="charts-grid">
+                <div class="chart-panel">
+                    <div class="chart-title">Top 6 escolas</div>
+                    {% for item in escolas_top %}
+                        <div class="chart-row">
+                            <div class="chart-meta">
+                                <span>{{ item.key or 'Não informado' }}</span>
+                                <strong>{{ item.total }}</strong>
+                            </div>
+                            <div class="chart-bar-bg">
+                                <div class="chart-bar-fill" style="width: {{ item.width }}%;"></div>
+                            </div>
+                        </div>
+                    {% endfor %}
+                </div>
+                <div class="chart-panel">
+                    <div class="chart-title">Nível de atenção</div>
+                    {% for item in niveis_top %}
+                        <div class="chart-row">
+                            <div class="chart-meta">
+                                <span>{{ item.key or 'Não informado' }}</span>
+                                <strong>{{ item.total }}</strong>
+                            </div>
+                            <div class="chart-bar-bg">
+                                <div class="chart-bar-fill chart-fill-gold" style="width: {{ item.width }}%;"></div>
+                            </div>
+                        </div>
+                    {% endfor %}
+                </div>
+                <div class="chart-panel">
+                    <div class="chart-title">Regiões com mais cadastros</div>
+                    {% for item in regioes_top %}
+                        <div class="chart-row">
+                            <div class="chart-meta">
+                                <span>{{ item.key or 'Não informado' }}</span>
+                                <strong>{{ item.total }}</strong>
+                            </div>
+                            <div class="chart-bar-bg">
+                                <div class="chart-bar-fill" style="width: {{ item.width }}%;"></div>
+                            </div>
+                        </div>
+                    {% endfor %}
+                </div>
+            </div>
+        </section>
+
+        <section class="report-grid">
+            <div class="report-card">
+                <div class="section-card-content">
+                    <div>
+                        <h3>Alunos por escola</h3>
+                        <p class="subtitle">Distribuição por unidade escolar municipal.</p>
+                    </div>
+                </div>
+                <div class="table-scroll">
+                    <table class="report-table">
+                        <thead>
+                            <tr>
+                                <th>Escola</th>
+                                <th>Quantidade</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for item in escolas_por_escola %}
+                                <tr>
+                                    <td>{{ item.key or 'Não informado' }}</td>
+                                    <td>{{ item.total }}</td>
+                                </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <div class="report-card">
+                <div class="section-card-content">
+                    <div>
+                        <h3>Alunos por região</h3>
+                        <p class="subtitle">Distribuição por região de atuação.</p>
+                    </div>
+                </div>
+                <div class="table-scroll">
+                    <table class="report-table">
+                        <thead>
+                            <tr>
+                                <th>Região</th>
+                                <th>Quantidade</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for item in escolas_por_regiao %}
+                                <tr>
+                                    <td>{{ item.key or 'Não informado' }}</td>
+                                    <td>{{ item.total }}</td>
+                                </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <div class="report-card">
+                <div class="section-card-content">
+                    <div>
+                        <h3>Por nível de atenção</h3>
+                        <p class="subtitle">Classificação de prioridades de acompanhamento.</p>
+                    </div>
+                </div>
+                <div class="table-scroll">
+                    <table class="report-table">
+                        <thead>
+                            <tr>
+                                <th>Nível de atenção</th>
+                                <th>Quantidade</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for item in niveis_atencao %}
+                                <tr>
+                                    <td>{{ item.key or 'Não informado' }}</td>
+                                    <td>{{ item.total }}</td>
+                                </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <div class="report-card">
+                <div class="section-card-content">
+                    <div>
+                        <h3>Por turno</h3>
+                        <p class="subtitle">Divisão dos cadastros por turno escolar.</p>
+                    </div>
+                </div>
+                <div class="table-scroll">
+                    <table class="report-table">
+                        <thead>
+                            <tr>
+                                <th>Turno</th>
+                                <th>Quantidade</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for item in turnos %}
+                                <tr>
+                                    <td>{{ item.key or 'Não informado' }}</td>
+                                    <td>{{ item.total }}</td>
+                                </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </section>
+
+        <section class="report-card">
+            <div class="section-card-content">
+                <div>
+                    <h3>Últimos cadastros realizados</h3>
+                    <p class="subtitle">Visão rápida dos registros mais recentes gerados no sistema.</p>
+                </div>
+            </div>
+            <div class="table-scroll">
+                <table class="report-table">
+                    <thead>
+                        <tr>
+                            <th>Aluno</th>
+                            <th>Escola</th>
+                            <th>Data de cadastro</th>
+                            <th>Status</th>
+                            <th>Nível de atenção</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for aluno in cadastros_recentes %}
+                            <tr>
+                                <td>{{ aluno.aluno_nome }}</td>
+                                <td>{{ aluno.escola_nome }}</td>
+                                <td>{{ aluno.data_cadastro }}</td>
+                                <td>{{ aluno.status_caso }}</td>
+                                <td>{{ aluno.nivel_atencao }}</td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+        <section class="report-card">
+            <div class="section-card-content">
+                <div>
+                    <h3>Resumo dos principais indicadores</h3>
+                    <p class="subtitle">Síntese executiva com os indicadores-chave do relatório.</p>
+                </div>
+            </div>
+            <div class="report-summary-text">
+                <p>Este relatório apresenta o panorama atual de triagem e acompanhamento inclusivo do Núcleo de Inclusão. Os dados são fictícios, gerados para demonstração institucional de processos e indicadores.</p>
+                <ul>
+                    <li>50 cadastros realizados em escolas municipais de Sumaré.</li>
+                    <li>22 escolas diferentes participaram do processo.</li>
+                    <li>36 casos foram identificados como em atenção ou acompanhamento.</li>
+                    <li>2 registros foram inseridos nos últimos 7 dias para demonstrar atividade recente.</li>
+                </ul>
+            </div>
+        </section>
+    </main>
+
+    {% include 'footer.html' %}
+</body>
+</html>
